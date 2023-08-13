@@ -1,3 +1,4 @@
+// Package pantrypath Pantry Path Plugin package.
 package pantrypath
 
 import (
@@ -64,12 +65,12 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}), nil
 }
 
-// BuildPantryPath , build path to ROOT pantry storage
+// BuildPantryPath , build path to ROOT pantry storage.
 func BuildPantryPath(key string) string {
 	return fmt.Sprintf("/apiv1/pantry/%s", key)
 }
 
-// BuildPantryPathWithBasket , build path to BASKET on pantry storage
+// BuildPantryPathWithBasket , build path to BASKET on pantry storage.
 func BuildPantryPathWithBasket(key string, basket string) string {
 	return fmt.Sprintf("/apiv1/pantry/%s/basket/%s", key, basket)
 }
