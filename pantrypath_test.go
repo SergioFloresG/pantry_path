@@ -79,6 +79,7 @@ func TestWithOutBasket(t *testing.T) {
 }
 
 func caseText(t *testing.T, cfgCase *CaseConfig, cfg *pantrypath.Config) *http.Request {
+	t.Helper()
 	ctx := context.Background()
 	recorder := httptest.NewRecorder()
 
