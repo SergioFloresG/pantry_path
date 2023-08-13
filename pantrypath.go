@@ -16,6 +16,7 @@ type Config struct {
 }
 
 const defaultKeyHeaderValue = "X-Pantry-Key"
+
 const defaultBasketRegexValue = `([^/]+)/?$`
 
 // CreateConfig creates the default plugin configuration.
@@ -71,6 +72,6 @@ func BuildPantryPath(key string) string {
 }
 
 // BuildPantryPathWithBasket , build path to BASKET on pantry storage.
-func BuildPantryPathWithBasket(key string, basket string) string {
+func BuildPantryPathWithBasket(key, basket string) string {
 	return fmt.Sprintf("/apiv1/pantry/%s/basket/%s", key, basket)
 }
