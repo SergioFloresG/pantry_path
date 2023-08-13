@@ -2,6 +2,7 @@ displayName: Pantry Route Converter
 type: middleware
 
 iconPath: .assets/icon.png
+import: github.com/SergioFloresG/pantrypath
 
 summary: 'Transforma las peticiones a la ruta estandar de Pantry.'
 
