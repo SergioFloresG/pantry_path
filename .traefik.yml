@@ -1,0 +1,10 @@
+displayName: Pantry Route Converter
+type: middleware
+
+iconPath: .assets/icon.png
+
+summary: 'Transforma las peticiones a la ruta estandar de Pantry.'
+
+testData:
+  KeyHeader: X-Pantry-Key
+  BasketRegex: "([^/]+)/?$"
