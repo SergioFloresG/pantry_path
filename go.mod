@@ -1,3 +1,3 @@
-module github.com/SergioFloresG/pantry_path
+module github.com/SergioFloresG/pantrypath
 
 go 1.19

@@ -1,4 +1,4 @@
-package pantry_path
+package pantrypath
 
 import (
 	"context"
@@ -14,14 +14,14 @@ type Config struct {
 	BasketRegex string `json:"basketRegex,omitempty"` // Regex, from a single group, to get the target basket
 }
 
-const DefaultKeyHeaderValue = "X-Pantry-Key"
-const DefaultBasketRegexValue = `([^/]+)/?$`
+const defaultKeyHeaderValue = "X-Pantry-Key"
+const defaultBasketRegexValue = `([^/]+)/?$`
 
 // CreateConfig creates the default plugin configuration.
 func CreateConfig() *Config {
 	return &Config{
-		KeyHeader:   DefaultKeyHeaderValue,
-		BasketRegex: DefaultBasketRegexValue,
+		KeyHeader:   defaultKeyHeaderValue,
+		BasketRegex: defaultBasketRegexValue,
 	}
 }
 
@@ -41,22 +41,22 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}
 
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		var pantryId string
+		var pantryID string
 		var basketGroups []string
 		var pantryPath string
 
-		pantryId = req.Header.Get(config.KeyHeader)
+		pantryID = req.Header.Get(config.KeyHeader)
 		req.Header.Del(config.KeyHeader)
-		if pantryId == "" {
-			pantryId = "unknown"
-			_, _ = os.Stderr.WriteString("Pantry Id not found")
+		if pantryID == "" {
+			pantryID = "unknown"
+			_, _ = os.Stderr.WriteString("Pantry ID not found")
 		}
 
 		basketGroups = re.FindStringSubmatch(req.URL.Path)
 		if basketGroups == nil {
-			pantryPath = BuildPantryPath(pantryId)
+			pantryPath = BuildPantryPath(pantryID)
 		} else {
-			pantryPath = BuildPantryPathWithBasket(pantryId, basketGroups[1])
+			pantryPath = BuildPantryPathWithBasket(pantryID, basketGroups[1])
 		}
 		req.URL.Path = pantryPath
 
@@ -64,10 +64,12 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}), nil
 }
 
+// BuildPantryPath , build path to ROOT pantry storage
 func BuildPantryPath(key string) string {
 	return fmt.Sprintf("/apiv1/pantry/%s", key)
 }
 
+// BuildPantryPathWithBasket , build path to BASKET on pantry storage
 func BuildPantryPathWithBasket(key string, basket string) string {
 	return fmt.Sprintf("/apiv1/pantry/%s/basket/%s", key, basket)
 }

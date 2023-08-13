@@ -1,4 +1,4 @@
-package pantry_path_test
+package pantrypath_test
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/SergioFloresG/pantry_path"
+	"github.com/SergioFloresG/pantrypath"
 )
 
 type CaseConfig struct {
 	Header     string `json:"header"`
-	Id         string `json:"id"`
+	ID         string `json:"id"`
 	Basket     string `json:"basket"`
 	PrefixPath string `json:"prefixPath"`
 }
@@ -32,53 +32,53 @@ func (cfg CaseConfig) Path() string {
 func createCaseConfig() *CaseConfig {
 	return &CaseConfig{
 		Header: "X-Pantry-Key",
-		Id:     "715489ae-0dfd-44a4-b12b-bd7b9f69a473",
+		ID:     "715489ae-0dfd-44a4-b12b-bd7b9f69a473",
 	}
 }
 
 func TestDefaultPantry(t *testing.T) {
-	cfg := pantry_path.CreateConfig()
+	cfg := pantrypath.CreateConfig()
 	cfgCase := createCaseConfig()
 
 	cfgCase.Basket = "test-basket-name"
 	req := caseText(t, cfgCase, cfg)
 
-	assertPath(t, req, pantry_path.BuildPantryPathWithBasket(cfgCase.Id, cfgCase.Basket))
+	assertPath(t, req, pantrypath.BuildPantryPathWithBasket(cfgCase.ID, cfgCase.Basket))
 }
 
 func TestPrefixPath(t *testing.T) {
-	cfg := pantry_path.CreateConfig()
+	cfg := pantrypath.CreateConfig()
 	cfgCase := createCaseConfig()
 
 	cfgCase.Basket = "test-prefix-basket"
 	cfgCase.PrefixPath = "this-is/the-prefix"
 
 	req := caseText(t, cfgCase, cfg)
-	assertPath(t, req, pantry_path.BuildPantryPathWithBasket(cfgCase.Id, cfgCase.Basket))
+	assertPath(t, req, pantrypath.BuildPantryPathWithBasket(cfgCase.ID, cfgCase.Basket))
 }
 
 func TestKeyNotFound(t *testing.T) {
-	cfg := pantry_path.CreateConfig()
+	cfg := pantrypath.CreateConfig()
 	cfgCase := createCaseConfig()
 
 	cfgCase.Basket = "test-nokey-basket"
 	cfgCase.Header = "X-NoMatch-Key"
 
 	req := caseText(t, cfgCase, cfg)
-	assertPath(t, req, pantry_path.BuildPantryPathWithBasket("unknown", cfgCase.Basket))
+	assertPath(t, req, pantrypath.BuildPantryPathWithBasket("unknown", cfgCase.Basket))
 }
 
 func TestWithOutBasket(t *testing.T) {
-	cfg := pantry_path.CreateConfig()
+	cfg := pantrypath.CreateConfig()
 	cfgCase := createCaseConfig()
 
 	cfgCase.Basket = ""
 
 	req := caseText(t, cfgCase, cfg)
-	assertPath(t, req, pantry_path.BuildPantryPath(cfgCase.Id))
+	assertPath(t, req, pantrypath.BuildPantryPath(cfgCase.ID))
 }
 
-func caseText(t *testing.T, cfgCase *CaseConfig, cfg *pantry_path.Config) *http.Request {
+func caseText(t *testing.T, cfgCase *CaseConfig, cfg *pantrypath.Config) *http.Request {
 	ctx := context.Background()
 	recorder := httptest.NewRecorder()
 
@@ -88,10 +88,10 @@ func caseText(t *testing.T, cfgCase *CaseConfig, cfg *pantry_path.Config) *http.
 		t.Fatal(err)
 	}
 
-	req.Header.Add(cfgCase.Header, cfgCase.Id)
+	req.Header.Add(cfgCase.Header, cfgCase.ID)
 
 	next := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
-	handler, err := pantry_path.New(ctx, next, cfg, "pantry_path")
+	handler, err := pantrypath.New(ctx, next, cfg, "pantrypath")
 	if err != nil {
 		t.Fatal(err)
 	}
